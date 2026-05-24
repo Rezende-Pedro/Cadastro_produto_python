@@ -6,6 +6,13 @@ class Produto:
     def mostrar(self):
         print(f"Produto: {self.nome} | Preço: R${self.preco}".replace('.',','))
         
+    def guardar(self):
+        dic_product = {
+            "produto": nome_produto,
+            "valor": valor}
+        
+        lista_produtos.append(dic_product)
+        
 def menu_inicial():
     try:
         menu = input("\nSelecione uma das opções abaixo:\n1-Cadastrar produto \n2-Lista de produtos\n3-Comprar produto\n4.Sair\n")
@@ -60,11 +67,8 @@ while True:
         nome_produto = produto()
         valor = valor_produto()
         
-        dic_product = {
-            "produto": nome_produto,
-            "valor": valor}
-        
-        lista_produtos.append(dic_product)
+        p.guardar()
+        print("--PRODUTO CADASTRADO--\n")
         
     if resposta == 2:
         print("\n--LISTA DE PRODUTOS--")
@@ -105,7 +109,13 @@ while True:
                             continue
                             
                         total = quantidade * produto_encontra['valor']
-                        print(f"O valor da compra é R${total:.2f}\n".replace(".",","))
+                        if total >= 100:
+                            print("Desconto disponível")
+                            desconto = (total / 100) *95
+                            print(f"O valor da compra é R${total:.2f}, porém com o desconto o novo valor passa a ser {desconto:.2f}\n".replace(".",","))
+                        else:
+                            print("Desconto indisponível")
+                            print(f"O valor da compra é R${total:.2f}\n".replace(".",","))
             
                         while True:
                             try:
