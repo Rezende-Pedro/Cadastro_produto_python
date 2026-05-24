@@ -4,14 +4,7 @@ class Produto:
         self.preco = preco
         
     def mostrar(self):
-        print(f"Produto: {self.nome} | Preço: R${self.preco}".replace('.',','))
-        
-    def guardar(self):
-        dic_product = {
-            "produto": nome_produto,
-            "valor": valor}
-        
-        lista_produtos.append(dic_product)
+        print(f"Produto: {self.nome} | Preço: R${self.preco:.2f}".replace('.',','))
         
 def menu_inicial():
     try:
@@ -37,16 +30,19 @@ def produto():
         if len(produto) == 0:
             print("Erro: este campo não pode ficar em branco \n")
         
-        elif not produto.replace(' ', '').isalpha():
-            print("Erro: Digite apenas letras")
+        elif not produto[0].isalpha():
+            print("Erro: O nome do produto deve começar com uma letra")
+            
+        elif not produto.replace(' ', '').isalnum():
+            print("Erro: Digite letras e numeros")
         
         else:
             return produto
             
-def valor_produto():
+def valor_produto(nome):
     while True:
         try:
-            valor = float(input(f"digite o valor do produto: ").replace(',','.'))
+            valor = float(input(f"digite o valor do produto {nome}: ").replace(',','.'))
             if valor <= 0:
                 print("Erro: digite uma valor válido para o produto\n")
             else:
@@ -65,10 +61,12 @@ while True:
     
     if resposta == 1:
         nome_produto = produto()
-        valor = valor_produto()
+        valor = valor_produto(nome_produto)
         
-        p.guardar()
-        print("--PRODUTO CADASTRADO--\n")
+        novo_produto = Produto(nome_produto, valor)
+        
+        lista_produtos.append(novo_produto)
+        print(f"Produto {nome_produto} cadastrado com sucesso!")
         
     if resposta == 2:
         print("\n--LISTA DE PRODUTOS--")
@@ -76,8 +74,7 @@ while True:
             print("Nenhum produto foi cadastrado\n")
         
         for item in lista_produtos:
-            p = Produto(item['produto'], item['valor'])
-            p.mostrar()
+            item.mostrar()
         
     if resposta == 3:
         while True:
@@ -87,14 +84,13 @@ while True:
             else:
                 print("\n--PRODUTOS DISPONÍVEIS--\n")
                 for item in lista_produtos:
-                    p = Produto(item['produto'], item['valor'])
-                    p.mostrar()
+                    item.mostrar()
             
                 escolher = input("\nDigite o produto desejado: ").strip().lower()
                 produto_encontra = None
         
                 for item in lista_produtos:
-                    if item['produto'].lower() == escolher:
+                    if item.nome.lower() == escolher:
                         produto_encontra = item  
                         break 
                 
@@ -103,12 +99,12 @@ while True:
                 
                 else: 
                     try:
-                        quantidade = int(input(f"Digite a quantidade levada de {produto_encontra['produto']}: "))
+                        quantidade = int(input(f"Digite a quantidade levada de {produto_encontra.nome}: "))
                         if quantidade <= 0:
                             print("Quantidade inválida.")
                             continue
                             
-                        total = quantidade * produto_encontra['valor']
+                        total = quantidade * produto_encontra.preco
                         if total >= 100:
                             print("Desconto disponível")
                             desconto = (total / 100) *95
