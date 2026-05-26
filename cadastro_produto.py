@@ -127,4 +127,3 @@ while True:
                         
                     except ValueError:
                         print("Erro: Digite um número válido para a quantidade.\n")
-                        
